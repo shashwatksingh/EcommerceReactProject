@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Products, Navbar } from "./components";
+import { Products, Navbar, Cart } from "./components";
 import { commerce } from "./lib/commerce";
 
 const App = () => {
@@ -10,32 +10,30 @@ const App = () => {
     //Destructing the data that we get on the response after awaiting for it
     const { data } = await commerce.products.list();
     setProducts(data);
-  }
+  };
 
   const fetchCart = async () => {
     //Fetching the cart from the Commerce.js
     const response = await commerce.cart.retrieve();
     setCart(response);
-  }
-
+  };
+  
   const handleAddToCart = async (productId, quantity) => {
     const item = await commerce.cart.add(productId, quantity);
-
     setCart(item.cart);
-  }
-
+  };
+  
   //Only run at the start.
   useEffect(() => {
     fetchProducts();
     fetchCart();
   }, []);
-
-  console.log(cart);
-
+  
   return (
     <div>
       <Navbar totalItems={cart.total_items} />
-      <Products products={products} onAddToCart={handleAddToCart} />
+      {/* <Products products={products} onAddToCart={handleAddToCart} /> */}
+      <Cart cart={cart} />
     </div>
   );
 };
