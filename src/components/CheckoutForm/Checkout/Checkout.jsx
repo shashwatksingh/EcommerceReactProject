@@ -10,6 +10,7 @@ const Checkout = ({ cart }) => {
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0);
     const [checkoutToken, setCheckoutToken] = useState(null);
+    const [shippingData, setShippingData] = useState({})
     useEffect(() => {
         const generateToken = async () => {
             try{
@@ -23,13 +24,22 @@ const Checkout = ({ cart }) => {
         // You cannot create async function as a direct function of useEffect
         generateToken();
     }, [cart]);
-    const Form = () => activeStep === 0 ? <AddressForm checkoutToken={checkoutToken} /> : <PaymentForm />
+
+    const nextStep = () => setActiveStep(prev => prev + 1);
+    const backStep = () => setActiveStep(prev => prev - 1);
+
+    const next = (data) => {
+        setShippingData(data);
+        nextStep();
+    }
     
     const Confirmation = () => (
         <div>
             Confirmation
         </div>
     )
+    
+    const Form = () => activeStep === 0 ? <AddressForm checkoutToken={checkoutToken} next={next} /> : <PaymentForm shippingData={shippingData} />
     
     return (
         <React.Fragment>
