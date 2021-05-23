@@ -44,6 +44,8 @@ const Cart = ({ cart = {}, handleUpdateCartQty, handleRemoveFromCart, handleEmpt
             type="button"
             variant="contained"
             color="primary"
+            component={Link}
+            to="/checkout"
           >
             Checkout
           </Button>
@@ -57,7 +59,7 @@ const Cart = ({ cart = {}, handleUpdateCartQty, handleRemoveFromCart, handleEmpt
     <Container>
       <div className={classes.toolbar} />
       <Typography className={classes.title} variant="h3" gutterBottom>
-        Your Shopping cart is Empty
+        Your Shopping cart has
       </Typography>
       {cart.line_items.length ? <FilledCart /> : <EmptyCart />}
     </Container>
