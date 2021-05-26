@@ -4,8 +4,8 @@ import { Elements, CardElement, ElementsConsumer } from '@stripe/react-stripe-js
 import { loadStripe } from '@stripe/stripe-js';
 import Review from './Review';
 
-const stripePromise = loadStripe("pk_test_51IuL8bSJNs038e9RW8SgsxGWZaxGL4uhoLqg160CQwXGBCq6527tHbKx8ZHhbR2F3dVfhCIrj3o0eHwZAp0NnSR300ZOQSVn7J");
-console.log(stripePromise);
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
+console.log(process.env.REACT_APP_STRIPE_KEY);
 
 const PaymentForm = ({ checkoutToken, shippingData, nextStep, backStep, onCaptureCheckout }) => {
 

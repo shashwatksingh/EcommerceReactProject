@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button } from '@material-ui/core';
+import { Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button, CssBaseline } from '@material-ui/core';
 import useStyles from './styles';
 import AddressForm from '../AddressForm';
 import PaymentForm from '../PaymentForm';
 import { commerce } from '../../../lib/commerce';
+import { Link } from 'react-router-dom';
 
 const steps = ['Shipping address', 'Payment Details'];
 const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
@@ -19,7 +20,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
                 console.log(token);
                 setCheckoutToken(token);             
             } catch (error) {
-    
+                console.log(error);
             }
         }
         // You cannot create async function as a direct function of useEffect
@@ -35,16 +36,35 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
         nextStep();
     }
     
-    const Confirmation = () => (
-        <div>
-            Confirmation
+    let Confirmation = () => order.customer ? (
+        <React.Fragment>
+            <div>
+                <Typography variant="h5">Thank You for your purchase {order.customer.firstname} {order.customer.lastname}!! </Typography>
+                <Divider className={classes.divider} />
+                <Typography variant="subtitle2">Order ref: {order.customer_refernce}</Typography>
+            </div>
+            <br/>
+            <Button component={Link} to="/" variant="outlined" type="button">BACK TO HOME</Button>
+        </React.Fragment>
+    ) : (
+        <div className={classes.spinner}>
+            <CircularProgress />
         </div>
-    )
+    );
+    
+    if(error) {
+        <React.Fragment>
+            <Typography variant="h5">Error: {error}</Typography>
+            <br />
+            <Button component={Link} to="/" variant="outlined" type="button">BACK TO HOME</Button>
+        </React.Fragment>
+    }
     
     const Form = () => activeStep === 0 ? <AddressForm checkoutToken={checkoutToken} test={test} /> : <PaymentForm onCaptureCheckout={onCaptureCheckout} shippingData={shippingData} checkoutToken={checkoutToken} nextStep={nextStep} backStep={backStep} />
     
     return (
         <React.Fragment>
+            <CssBaseline />
             <div className={classes.toolbar} />
             <div className={classes.layout} />
             <Paper className={classes.paper}>
