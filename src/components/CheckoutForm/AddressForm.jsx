@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { InputLabel, Select, MenuItem, Buton, Grid, Typography, Button } from '@material-ui/core';
+import { InputLabel, Select, MenuItem, Button, Grid, Typography } from '@material-ui/core';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { commerce } from '../../lib/commerce';
 import FormInput from './CustomTextField';
 
-const AddressForm = ({ checkoutToken, next }) => {
+const AddressForm = ({ checkoutToken, test }) => {
     const [shippingCountries, setShippingCountries] = useState([]);
     const [shippingCountry, setShippingCountry] = useState('');   
     const [shippingSubdivisions, setShippingSubdivisions] = useState([]);   
@@ -36,7 +36,12 @@ const AddressForm = ({ checkoutToken, next }) => {
         setShippingOptions(options);
         setShippingOption(options[0].id);
     }
-    
+
+    const handleChange = (e, name) =>{
+        console.log("handleChange called for", name);
+        methods.setValue(name, e.target.value);
+    }
+
     useEffect(() => {
         if(shippingCountry) fetchSubdivisions(shippingCountry);        
     }, [shippingCountry])
@@ -53,14 +58,14 @@ const AddressForm = ({ checkoutToken, next }) => {
         <div>
             <Typography varaint="h6" gutterBottom>Shipping Address</Typography>
             <FormProvider {...methods}>
-                <form onSubmit={methods.handleSubmit((data) => next({ ...data, shippingCountry, shippingSubdivision, shippingOption }))}>
+                <form onSubmit={methods.handleSubmit((data) => test({ ...data, shippingCountry, shippingSubdivision, shippingOption }))}>
                     <Grid container spacing={3}>
-                        <FormInput name="firstName" label="First name" />
-                        <FormInput name="lastName" label="Last name" />
-                        <FormInput name="address1" label="Address" />
-                        <FormInput name="email" label="Email" />
-                        <FormInput name="city" label="City" />
-                        <FormInput name="zip" label="Zip / Postal Code" />
+                        <FormInput name="firstName" handleChange={handleChange} label="First name" />
+                        <FormInput name="lastName" handleChange={handleChange} label="Last name" />
+                        <FormInput name="address1" handleChange={handleChange} label="Address" />
+                        <FormInput name="email" handleChange={handleChange} label="Email" />
+                        <FormInput name="city" handleChange={handleChange} label="City" />
+                        <FormInput name="zip" handleChange={handleChange} label="Zip / Postal Code" />
                         <Grid item xs={12} sm={6}>
                             <InputLabel>Shipping Country</InputLabel>
                             <Select value={shippingCountry} fullWidth onChange={(e) => setShippingCountry(e.target.value)}>
